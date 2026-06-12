@@ -1,0 +1,43 @@
+name: QA Automation Regression Run
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test-execution:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Installs the actual browsers (Chromium, Firefox, WebKit) into the GitHub runner
+    - name: Install Playwright Browsers
+      run: playwright install --with-deps
+
+    # Runs pytest and tells it to generate an HTML report named "report.html"
+    - name: Run Automation Tests
+      run: pytest --html=report.html --self-contained-html
+
+    # Uploads the report.html file so you can view it after the run finishes
+    - name: Upload Test Report Artifacts
+      uses: actions/upload-artifact@v4
+      if: always() 
+      with:
+        name: qa-test-results
+        path: report.html
+        retention-days: 7
