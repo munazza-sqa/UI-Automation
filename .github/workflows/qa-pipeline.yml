@@ -5,6 +5,10 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+# Added permissions required to deploy to GitHub Pages
+permissions:
+  contents: write
+
 jobs:
   test-execution:
     timeout-minutes: 15
@@ -25,19 +29,31 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Installs the actual browsers (Chromium, Firefox, WebKit) into the GitHub runner
     - name: Install Playwright Browsers
       run: playwright install --with-deps
 
-    # Runs pytest and tells it to generate an HTML report named "report.html"
+    # Changed the report name to index.html inside a 'public' directory for easy GH Pages hosting
     - name: Run Automation Tests
-      run: pytest --html=report.html --self-contained-html
+      run: |
+        mkdir -p public
+        pytest --html=public/index.html --self-contained-html
 
-    # Uploads the report.html file so you can view it after the run finishes
+    # Updated paths to match the new directory structure
     - name: Upload Test Report Artifacts
       uses: actions/upload-artifact@v4
       if: always() 
       with:
         name: qa-test-results
-        path: report.html
+        path: |
+          public/index.html
+          videos/
+          automation.log
         retention-days: 7
+      
+    # Pointed publish_dir directly to the 'public' folder
+    - name: Deploy Report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      if: always()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
