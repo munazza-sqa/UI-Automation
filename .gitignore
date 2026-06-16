@@ -1,0 +1,20 @@
+# Python bytecode (compiled files we don't need on GitHub)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pytest caching folder (stores local test run states)
+.pytest_cache/
+
+# Local logging files (stops your local automation run logs from uploading)
+*.log
+automation.log
+
+# Video recordings of test runs (if your framework captures videos of browser sessions)
+video/
+*.mp4
+
+# Local environment variables/credentials (add this just in case you create one later)
+.env
+*.env
