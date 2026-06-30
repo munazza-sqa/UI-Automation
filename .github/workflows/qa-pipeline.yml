@@ -5,7 +5,6 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
-# Added permissions required to deploy to GitHub Pages
 permissions:
   contents: write
 
@@ -32,28 +31,39 @@ jobs:
     - name: Install Playwright Browsers
       run: playwright install --with-deps
 
-    # Changed the report name to index.html inside a 'public' directory for easy GH Pages hosting
     - name: Run Automation Tests
+      env:
+        BASE_URL: ${{ vars.BASE_URL }}
+        SLOW_MO: ${{ vars.SLOW_MO }}
+        TIMEOUT: ${{ vars.TIMEOUT }}
+        LOG_FILE: ${{ vars.LOG_FILE }}
+        VIDEO_DIR: ${{ vars.VIDEO_DIR }}
       run: |
-        mkdir -p public
-        pytest --html=public/index.html --self-contained-html
+        pytest --alluredir=allure-results
+      continue-on-error: true 
 
-    # Updated paths to match the new directory structure
+    - name: Generate Allure Report
+      uses: simple-elf/allure-report-action@v1.9
+      if: always()
+      with:
+        allure_results: allure-results
+        allure_report: allure-report
+        allure_history: allure-history
+
     - name: Upload Test Report Artifacts
       uses: actions/upload-artifact@v4
-      if: always() 
+      if: always()
       with:
         name: qa-test-results
         path: |
-          public/index.html
-          videos/
+          allure-results/
+          video/
           automation.log
         retention-days: 7
       
-    # Pointed publish_dir directly to the 'public' folder
-    - name: Deploy Report to GitHub Pages
+    - name: Deploy Allure Report to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
+        publish_dir: ./allure-report

@@ -18,3 +18,5 @@ video/
 # Local environment variables/credentials (add this just in case you create one later)
 .env
 *.env
+
+allure-results/

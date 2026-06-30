@@ -1,9 +1,160 @@
 [
- {"username": "QA",
- "password": "12@",
- "expected":"Invalid username or password!"},
+ {"scenario": "signup a user with valid data",
+ "firstname": "Test", 
+ "lastname": "QA",
+ "address": "S#123",
+ "city": "NYC",
+ "state": "US",
+ "zipcode": "123",
+ "phonenumber": "+16548787845",
+ "ssn": "1234567",
+ "username": "qa",
+ "password": "123@QA",
+ "confirmpassword": "123@QA",
+ 
+ "expected":"Your account was created"},
 
- {"username": "QA12",
- "password": "12@2",
- "expected":"Invalid username or password!"}
+
+ {"scenario": "signup a user with incorrect password",
+ "firstname": "Test",
+ "lastname": "QA",
+ "address": "S#123",
+ "city": "NYC",
+ "state": "US",
+ "zipcode": "123",
+ "phonenumber": "+16548787845",
+ "ssn": "1234567",
+ "username": "QA",
+ "password": "123@QA",
+ "confirmpassword": "123",
+ 
+ "expected":"Passwords did not match"},
+
+
+ {"scenario": "signup a user with invalid data types",
+ "firstname": "123",
+ "lastname": "1234",
+ "address": "@2nd Street",
+ "city": "@NYC",
+ "state": "USA!",
+ "zipcode": "#one",
+ "phonenumber": "+pldc",
+ "ssn": "abcdes",
+ "username": "test@123",
+ "password": "123",
+ "confirmpassword": "123",
+ 
+ "expected":"Please enter valid data"},
+
+ 
+ {"scenario": "signup a user with invalid data length",
+  "firstname": "Pablo",
+  "lastname": "Peter",
+  "address": "1234 Greater Metropolitan North Broadway Avenue Suite 500",
+  "city": "NewYorkCityCenterGreaterMetroAreaUX",
+  "state": "NY",
+  "zipcode": "10001",
+  "phonenumber": "555-0199",
+  "ssn": "000-12-3456",
+  "username": "valid765user",
+  "password": "ValidPassword123!",
+  "confirmpassword": "ValidPassword123!",
+
+  "expected": "Please enter required data length"},
+ 
+ 
+ {"scenario": "signup a user with invalid criteria for password",
+  "firstname": "Munazza",
+  "lastname": "Tester",
+  "address": "742 Evergreen Terrace",
+  "city": "Springfield",
+  "state": "IL",
+  "zipcode": "62704",
+  "phonenumber": "217-555-0143",
+  "ssn": "999-12-3456",
+  "username": "munazza_qa_test",
+  "password": "weakpassword",
+  "confirmpassword": "weakpassword",
+
+  "expected": "Create a password with at least 8 characters, including uppercase, lowercase, number and special character"},
+
+
+{"scenario": "signup a user with boundary value",
+  "firstname": "A",
+  "lastname": "B",
+  "address": "1",
+  "city": "C",
+  "state": "K",
+  "zipcode": "1",
+  "phonenumber": "2",
+  "ssn": "3",
+  "username": "u",
+  "password": "p",
+  "confirmpassword": "p",
+  
+  "expected": "Your account was created"},
+
+ 
+ {"scenario": "signup a user with null data",
+ "firstname": "",
+ "lastname": "",
+ "address": "",
+ "city": "",
+ "state": "",
+ "zipcode": "",
+ "phonenumber": "",
+ "ssn": "",
+ "username": "",
+ "password": "",
+ "confirmpassword": "",
+ 
+ "expected":"First name is required."},
+ 
+
+ {"scenario": "signup a user with few fields empty",
+ "firstname": "",
+ "lastname": "QA",
+ "address": "S#123",
+ "city": "",
+ "state": "US",
+ "zipcode": "123",
+ "phonenumber": "",
+ "ssn": "1234567",
+ "username": "qa",
+ "password": "123@qa",
+ "confirmpassword": "123@qa",
+ 
+ "expected":"First name is required."},
+
+
+ {"scenario": "signup a user with trailing spaces in username",
+ "firstname": "  Test", 
+ "lastname": "QA",
+ "address": "S#123",
+ "city": "NYC",
+ "state": "US",
+ "zipcode": "123",
+ "phonenumber": "+16548787845",
+ "ssn": "1234567",
+ "username": "eiupe",
+ "password": "123@QA",
+ "confirmpassword": "123@QA",
+ 
+ "expected":"Trailing spaces are not allowed."},
+ 
+ 
+{"scenario": "signup a user with password mismatch",
+ "firstname": "Test", 
+ "lastname": "QA",
+ "address": "S#123",
+ "city": "NYC",
+ "state": "US",
+ "zipcode": "123",
+ "phonenumber": "+16548787845",
+ "ssn": "1234567",
+ "username": "qa",
+ "password": "123@QA",
+ "confirmpassword": "456@QA",
+ 
+ "expected":"Passwords did not match."}
 ]
