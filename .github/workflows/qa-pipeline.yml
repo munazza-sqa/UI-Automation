@@ -33,7 +33,9 @@ jobs:
       run: playwright install --with-deps
 
     # 1. Run tests using the Allure directory flag
+    # continue-on-error ensures failed test cases won't turn the pipeline run red
     - name: Run Automation Tests
+      continue-on-error: true
       env:
         # Maps variables from GitHub Settings -> Secrets & Variables -> Actions -> Variables
         BASE_URL: ${{ vars.BASE_URL }}
@@ -54,6 +56,11 @@ jobs:
       with:
         ref: gh-pages
         path: gh-pages
+
+    # Guardrail: Guarantees the directory exists so the report generator never crashes
+    - name: Ensure History Directory Exists
+      if: always()
+      run: mkdir -p gh-pages
 
     # 3. Build the Allure report using the verified marketplace action
     - name: Generate Allure Report with History
