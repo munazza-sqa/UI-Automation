@@ -5,18 +5,20 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
-# Added permissions required to deploy to GitHub Pages
-permissions:
-  contents: write
-
 jobs:
   test-execution:
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      pages: write
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -33,11 +35,9 @@ jobs:
       run: playwright install --with-deps
 
     # 1. Run tests using the Allure directory flag
-    # continue-on-error ensures failed test cases won't turn the pipeline run red
     - name: Run Automation Tests
       continue-on-error: true
       env:
-        # Maps variables from GitHub Settings -> Secrets & Variables -> Actions -> Variables
         BASE_URL: ${{ vars.BASE_URL }}
         SLOW_MO: ${{ vars.SLOW_MO }}
         TIMEOUT: ${{ vars.TIMEOUT }}
@@ -57,7 +57,6 @@ jobs:
         ref: gh-pages
         path: gh-pages
 
-    # Guardrail: Guarantees the directory exists so the report generator never crashes
     - name: Ensure History Directory Exists
       if: always()
       run: mkdir -p gh-pages
@@ -85,7 +84,7 @@ jobs:
           automation.log
         if-no-files-found: ignore
         retention-days: 7
-      
+
     # 5. Point publish_dir directly to the consolidated 'allure-history' folder
     - name: Deploy Report to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4

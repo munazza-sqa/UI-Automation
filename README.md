@@ -51,27 +51,27 @@ Ensure you have Python 3.x installed on your system.
 # 2. Installation  
 Clone the repository and install the required dependencies:
 
-**Clone the project**  
-git clone https://github.com/your-username/your-repo-name.git
+**Clone the project:**  
+git clone https://github.com/munazza-sqa/UI-Automation.git
 
-**Install dependencies**  
+**Install dependencies:**  
 pip install -r requirements.txt
 
-**Install Playwright browser binaries**   
+**Install Playwright browser binaries:**   
 playwright install chromium
 
 
 # 🧪 Running Tests  
-**Execute All Tests (Headless Mode)**  
+**Execute All Tests (Headless Mode):**  
 pytest   
 
-**Execute Tests in Headed Mode (UI Visible)** 
+**Execute Tests in Headed Mode (UI Visible):**  
 pytest --headed  
 
-**Generate and View Allure Reports Locally**  
+**Generate and View Allure Reports Locally:**  
 pytest --alluredir=allure-results  
 
-**Serve the interactive report**  
+**Serve the interactive report:**  
 allure serve allure-results  
 
 
