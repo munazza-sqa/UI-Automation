@@ -1,24 +1,20 @@
 name: QA Automation Regression Run
-
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
-
 jobs:
   test-execution:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
       pages: write
-
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 
+        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -48,6 +44,13 @@ jobs:
         touch automation.log
         pytest --alluredir=allure-results
 
+    - name: Debug - check allure-results
+      if: always()
+      run: |
+        echo "== allure-results contents =="
+        ls -la allure-results || echo "MISSING allure-results"
+        find allure-results -type f | wc -l
+
     # 2. Pull down existing history from gh-pages so trend graphs persist
     - name: Load Test History From GitHub Pages
       uses: actions/checkout@v4
@@ -72,6 +75,14 @@ jobs:
         allure_history: allure-history
         keep_reports: 20
 
+    - name: Debug - check generated report dirs
+      if: always()
+      run: |
+        echo "== allure-report =="
+        ls -la allure-report || echo "MISSING allure-report"
+        echo "== allure-history =="
+        ls -la allure-history || echo "MISSING allure-history"
+
     # 4. Upload raw results and media assets as a run artifact backup
     - name: Upload Test Report Artifacts
       uses: actions/upload-artifact@v4
@@ -92,5 +103,5 @@ jobs:
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./allure-history
-        force_orphan: true 
+        publish_dir: ./allure-report
+        force_orphan: true
