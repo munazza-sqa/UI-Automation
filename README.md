@@ -84,4 +84,8 @@ The framework includes a fully configured .github/workflows/qa-pipeline.yml file
 
 3. Test artifacts (automation.log, execution videos, and screenshots) are collected.
 
-4. The latest execution results are compiled and published directly to your public portfolio via GitHub Pages.
+4. The latest execution results are compiled and published directly to your public portfolio via GitHub Pages.  
+
+
+🌐 View Dashboard: https://munazza-sqa.github.io/UI-Automation/
+![Allure Test Dashboard Snapshot](./asset/image_0.png)
